@@ -3,14 +3,13 @@
 Created on Thu Apr  7 22:37:32 2022
 @author: FrankNGUEN
 
-https://github.com/thangnch/MiAI_LP_Detection_SVM
-https://github.com/phamvanhanh6720/LicensePlateDetection
-
 """
 #------------------------------------------------------------------------------
+import os
 import cv2
 import numpy as np
-from lib_detection import load_model, detect_lp, im2single
+import matplotlib.pyplot as plt
+from utils import load_model, detect_lp, im2single
 #------------------------------------------------------------------------------
 # Ham sap xep contour tu trai sang phai
 def sort_contours(cnts):
@@ -23,13 +22,19 @@ def sort_contours(cnts):
 # Ham fine tune bien so, loai bo cac ki tu khong hop ly
 def fine_tune(lp):
     # Dinh nghia cac ky tu tren bien so
-    char_list =  '0123456789ABCDEFGHKLMNPRSTUVXYZ'
+    char_list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     newString = ""
     for i in range(len(lp)):
         if lp[i] in char_list:
             newString += lp[i]
     return newString
 #------------------------------------------------------------------------------
+def imgs_show(img1, str1):
+    fig, ax1 = plt.subplots(1,1,figsize=(12,8))
+    ax1.imshow(img1)
+    ax1.set_title(str1)
+    ax1.set_axis_off()
+#------------------------------------------------------------------------------    
 def run(image):
     Ivehicle           = image
     #--------------------------------------------------------------------------
@@ -93,20 +98,28 @@ def run(image):
         #cv2.imshow("Cac contour tim duoc", roi)
         #cv2.waitKey()
     #-------------------------------------------------------------------------
+        # Hien thi bien so
+        #print("Bien so=", plate_info)
         # Viet bien so len anh
-        cv2.putText(Ivehicle,fine_tune(plate_info),(50, 50), cv2.FONT_HERSHEY_PLAIN, 3.0, (0, 0, 255), lineType=cv2.LINE_AA)
-        # Hien thi anh
-        print("Bien so=", plate_info)
-        cv2.imshow("Hinh anh output",Ivehicle)
-        cv2.waitKey()
-#--------------------------------------------------------------------------
-    cv2.destroyAllWindows()
+        cv2.putText(Ivehicle,fine_tune(plate_info),(40, 100), cv2.FONT_HERSHEY_SIMPLEX, 3.0, (0, 0, 255), thickness=4)
+#-----------------------------------------------------------------------------
+    return Ivehicle, plate_info
 #------------------------------------------------------------------------------
 if __name__ == "__main__":
-    img_path  = "test/test1.jpg"
-    image     = cv2.imread(img_path)
-    # Hien anh goc:
-    #cv2.imshow("Anh goc:", Ivehicle)    
-    #cv2.waitKey()
-    run(image)
+    #Fjoin      = os.path.join
+    #img_path   = "./test"
+    #img_files  = [Fjoin(img_path,f) for f in os.listdir(img_path)]
+    #for img_path in img_files:
+    #    ori_image               = cv2.imread(img_path)
+    #    imgs_show(ori_image,'Original')  
+    #    rec_image, plate_infor  = run(ori_image)
+    #    imgs_show(rec_image, plate_infor)                                 
+    img_path = "test/test1.jpg"
+    img_test = cv2.imread(img_path)
+    cv2.imshow("Original image", img_test)
+    cv2.waitKey(0)
+    rec_image, plate_infor = run(img_test)
+    cv2.imshow("Recog: ", rec_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 #------------------------------------------------------------------------------
