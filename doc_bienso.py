@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr  7 22:37:32 2022
-@author: FrankNGUEN
-
+@author: 
+Doc bien so xe
 """
 #------------------------------------------------------------------------------
 import os
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     cv2.imshow("Original image", img_test)
     cv2.waitKey(0)
     rec_image, plate_infor = run(img_test)
-    cv2.imshow("Recog: ", rec_image)
+    cv2.imshow("Bien so nhan dang", rec_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 #------------------------------------------------------------------------------
